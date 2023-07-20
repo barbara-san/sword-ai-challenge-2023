@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import langchain
 from langchain.chat_models import AzureChatOpenAI
 from langchain.schema import HumanMessage
 
