@@ -1,3 +1,4 @@
+import streamlit as st
 import os
 from langchain.chat_models import AzureChatOpenAI
 from langchain.schema import HumanMessage
@@ -12,7 +13,6 @@ os.environ["OPENAI_API_VERSION"] = OPENAI_API_VERSION
 os.environ["OPENAI_API_TYPE"] = "azure"
 
 
-import streamlit as st
 
 st.title('🦜🔗 Quickstart App')
 
