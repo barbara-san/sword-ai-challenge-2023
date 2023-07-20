@@ -1,17 +1,8 @@
 import os
-from langchain.llms import AzureOpenAI
 from langchain.chat_models import AzureChatOpenAI
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferWindowMemory, CombinedMemory, ConversationSummaryMemory
-
-from langchain.agents import AgentType, Tool, initialize_agent
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import LLMChain
-from langchain.tools import WikipediaQueryRun
-from langchain.utilities import WikipediaAPIWrapper
-from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 
 AZURE_OPENAI_KEY = "4f8e9d40be39474c96fa1327dbd47516"
 AZURE_OPENAI_ENDPOINT = "https://openai-resource-team-3-france.openai.azure.com/"
@@ -21,9 +12,6 @@ os.environ["OPENAI_API_KEY"] = AZURE_OPENAI_KEY
 os.environ["OPENAI_API_BASE"] = AZURE_OPENAI_ENDPOINT
 os.environ["OPENAI_API_VERSION"] = OPENAI_API_VERSION
 os.environ["OPENAI_API_TYPE"] = "azure"
-
-WOLFRAM_ALPHA_APPID = "3HGHX2-433LKG3JK7"
-os.environ["WOLFRAM_ALPHA_APPID"] = WOLFRAM_ALPHA_APPID
 
 math_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=100, temperature=0.2)
 summary_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301")
@@ -70,19 +58,6 @@ conversation = ConversationChain(
     prompt=PROMPT
 )
 
-wolframalpha = WolframAlphaAPIWrapper()
-tools = [
-    Tool(
-        name="Math Helper",
-        func=wolframalpha.run,
-        description="useful for when you need to answer questions math related"
-    )
-]
-
-agent_chain = initialize_agent( 
-    tools, math_llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
-)
-
 print(conversation.run(context))
 
 from PerfectPrompt import better_prompt
@@ -94,8 +69,5 @@ while True:
     new_input_prompt = better_prompt(input_prompt)
     print(f"\nOriginal input:\n{input_prompt}\n\"Better\" input:\n{new_input_prompt}")
     answer = conversation.run(new_input_prompt)
-    print(f"ChatBot output to pass to the agent:\n\t{answer}\n")
-    final_answer = agent_chain.run(answer)
-    print(f"Agent output:\n\t{answer}\n")
-
+    print(f"Conversation bot output:\n\t{answer}\n")
 

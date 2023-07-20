@@ -1,12 +1,6 @@
 import os
-from langchain.llms import AzureOpenAI
 from langchain.chat_models import AzureChatOpenAI
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
-from langchain.prompts import PromptTemplate
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferWindowMemory, CombinedMemory, ConversationSummaryMemory
-
-from langchain.agents import AgentType, Tool, initialize_agent, ZeroShotAgent, AgentExecutor, ConversationalAgent
+from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import LLMChain
 from langchain.tools import WikipediaQueryRun
@@ -25,11 +19,7 @@ os.environ["OPENAI_API_TYPE"] = "azure"
 WOLFRAM_ALPHA_APPID = "3HGHX2-433LKG3JK7"
 os.environ["WOLFRAM_ALPHA_APPID"] = WOLFRAM_ALPHA_APPID
 
-math_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=1000, temperature=0.2)
 
-subject = "Mathematics"
-
-# Trying to create a base pre-prompt for math
 def get_context(subject):
     return f"""\
     The following text is simply an guide that the AI must follow after receiving this text input. \
@@ -69,39 +59,35 @@ def get_tools(subject):
 
     return tools_of_subject.get(subject)
 
+def get_prompt(subject):
+    suffix = """Begin!"
 
-suffix = """Begin!"
+    {chat_history}
+    Question: {input}
+    {agent_scratchpad}"""
 
-{chat_history}
-Question: {input}
-{agent_scratchpad}"""
-
-prompt = ZeroShotAgent.create_prompt(
-    get_tools(subject),
-    prefix=get_context(subject),
-    suffix=suffix,
-    input_variables=["input", "chat_history", "agent_scratchpad"],
-)
-memory = ConversationBufferMemory(memory_key="chat_history")
-
-llm_chain = LLMChain(llm=math_llm, prompt=prompt)
-
-agent = ZeroShotAgent(llm_chain=llm_chain, tools=get_tools(subject), verbose=True)
-
-agent_chain = AgentExecutor.from_agent_and_tools(
-    agent=agent, tools=get_tools(subject), verbose=True, memory=memory
-)
-
-from PerfectPrompt import better_prompt
-
-while True:
-    input_prompt = input("\nOriginal input:\n\t")
-    if input_prompt == "X":
-        break
-    new_input_prompt = better_prompt(input_prompt)
-    print(f"\n\"Better\" input:\n\t{new_input_prompt}")
-    answer = agent_chain.run(new_input_prompt)
-    print(f"Agent output:\n\t{answer}\n")
+    return ZeroShotAgent.create_prompt(
+        get_tools(subject),
+        prefix=get_context(subject),
+        suffix=suffix,
+        input_variables=["input", "chat_history", "agent_scratchpad"],
+    )
 
 
-
+class AgentChatBot:
+    def __init__(self, subject) -> None:
+        self.SUBJECT = subject
+        self.MAX_TOKENS = 1000
+        self.TEMPERATURE = 0.2
+        self.VERBOSE = True
+        self.LLM = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=self.MAX_TOKENS, temperature=self.TEMPERATURE)
+        self.MEMORY = ConversationBufferMemory(memory_key="chat_history")
+        self.LLM_CHAIN = LLMChain(llm=self.LLM, prompt=get_prompt(subject))
+        self.AGENT = ZeroShotAgent(llm_chain=self.LLM_CHAIN, tools=get_tools(subject), verbose=self.VERBOSE)
+        self.AGENT_CHAIN = AgentExecutor.from_agent_and_tools(
+            agent=self.AGENT, tools=get_tools(subject), verbose=True, memory=self.MEMORY
+        )
+    
+    def ask(self, input_prompt):
+        return self.AGENT_CHAIN.run(input_prompt)
+    
