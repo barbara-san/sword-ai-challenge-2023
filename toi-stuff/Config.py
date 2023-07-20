@@ -12,3 +12,4 @@ def load_environment():
     os.environ["OPENAI_API_VERSION"] = OPENAI_API_VERSION
     os.environ["OPENAI_API_TYPE"] = "azure"
     os.environ["WOLFRAM_ALPHA_APPID"] = WOLFRAM_ALPHA_APPID
+
