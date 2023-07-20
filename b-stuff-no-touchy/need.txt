@@ -1,3 +1,0 @@
-C:\Users\Barbs\Desktop\nothing and everything\projects\sword-ai-challenge-2023\b-stuff-no-touchy
-
-python -m http.server 8080 --bind 127.0.0.1
