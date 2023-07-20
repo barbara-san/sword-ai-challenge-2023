@@ -28,23 +28,44 @@ os.environ["WOLFRAM_ALPHA_APPID"] = WOLFRAM_ALPHA_APPID
 math_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=1000, temperature=0.2)
 summary_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301")
 
+subject = "Mathematics"
+
+
 # Trying to create a base pre-prompt for math
-context = """\
+context = f"""\
 The following text is simply an guide that the AI must follow after receiving this text input. \
 You won't need to use tools to answer to this prompt, as it only exists to give context to the AI. \
 For any following prompt given you can use tools to achieve an answer.
 This is a friendly conversation between a human and an AI. \
-The AI serves the purpose of being a mathematics tutor. \
+The AI serves the purpose of being a {subject} tutor. \
 The human is considered to be a highschooler learning in the Portuguese schools, which follow the portuguese teaching system. \
 The AI should help the human by giving clear detail on how to solve an exercise or how to understand a concept. \
 The AI must not use techniques that are considered to be of higher educational experience. \
-Any equations provided by the AI should be written delimited by ```. \
-If the AI does not know the answer to a question, it truthfully says it does not know. 
-\
+If the AI does not know the answer to a question, it truthfully says it does not know. \
 You have access to the following tools:\
 """
 
-wolframalpha = WolframAlphaAPIWrapper()
+def get_tools(subject):
+    # APIs
+    wolframalpha = WolframAlphaAPIWrapper()
+
+    # tools map
+    tools_of_subject = {
+        "Mathematics" : [
+            Tool(
+                name="Math Helper",
+                func=wolframalpha.run,
+                description="useful for when you need to answer questions math related"
+            )
+        ],
+        "History" : [
+            Tool(
+                name="Wikipedia Helper",
+                
+            )
+        ]
+    }
+
 tools = [
     Tool(
         name="Math Helper",
