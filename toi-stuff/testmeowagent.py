@@ -25,13 +25,13 @@ os.environ["OPENAI_API_TYPE"] = "azure"
 WOLFRAM_ALPHA_APPID = "3HGHX2-433LKG3JK7"
 os.environ["WOLFRAM_ALPHA_APPID"] = WOLFRAM_ALPHA_APPID
 
-math_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=100, temperature=0.2)
+math_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=1000, temperature=0.2)
 summary_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301")
 
 # Trying to create a base pre-prompt for math
 context = """\
 The following text is simply an guide that the AI must follow after receiving this text input. \
-The AI MUST asnwer to this prompt with \"Understood!\" and nothing else, therefore you won't need to use tools to answer to this prompt, as it only exists to give context to the AI. \
+You won't need to use tools to answer to this prompt, as it only exists to give context to the AI. \
 For any following prompt given you can use tools to achieve an answer.
 This is a friendly conversation between a human and an AI. \
 The AI serves the purpose of being a mathematics tutor. \
