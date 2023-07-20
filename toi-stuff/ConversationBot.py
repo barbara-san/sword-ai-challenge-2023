@@ -1,17 +1,7 @@
-import os
 from langchain.chat_models import AzureChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferWindowMemory, CombinedMemory, ConversationSummaryMemory
-
-AZURE_OPENAI_KEY = "4f8e9d40be39474c96fa1327dbd47516"
-AZURE_OPENAI_ENDPOINT = "https://openai-resource-team-3-france.openai.azure.com/"
-OPENAI_API_VERSION = "2023-03-15-preview"
-
-os.environ["OPENAI_API_KEY"] = AZURE_OPENAI_KEY
-os.environ["OPENAI_API_BASE"] = AZURE_OPENAI_ENDPOINT
-os.environ["OPENAI_API_VERSION"] = OPENAI_API_VERSION
-os.environ["OPENAI_API_TYPE"] = "azure"
 
 def get_context(subject):
     return f"""\

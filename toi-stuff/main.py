@@ -2,6 +2,9 @@ from PerfectPrompt import better_prompt
 from AgentBot import AgentChatBot
 from ConversationBot import ConversationChatBot
 
+from Environment import load_environment
+load_environment()
+
 SUBJECT = "History"
 
 agent = AgentChatBot(SUBJECT)
