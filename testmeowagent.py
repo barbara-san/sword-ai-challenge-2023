@@ -6,7 +6,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferWindowMemory, CombinedMemory, ConversationSummaryMemory
 
-from langchain.agents import AgentType, Tool, initialize_agent
+from langchain.agents import AgentType, Tool, initialize_agent, ZeroShotAgent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import LLMChain
 from langchain.tools import WikipediaQueryRun
@@ -31,44 +31,18 @@ summary_llm = AzureChatOpenAI(deployment_name="gpt35-team-3-0301")
 # Trying to create a base pre-prompt for math
 context = """\
 The following text is simply an guide that the AI must follow after receiving this text input. \
-The AI MUST asnwer to this prompt with \"Understood!\" and nothing else, as it only exists to give context to the AI. \
+The AI MUST asnwer to this prompt with \"Understood!\" and nothing else, therefore you won't need to use tools to answer to this prompt, as it only exists to give context to the AI. \
+For any following prompt given you can use tools to achieve an answer.
 This is a friendly conversation between a human and an AI. \
 The AI serves the purpose of being a mathematics tutor. \
 The human is considered to be a highschooler learning in the Portuguese schools, which follow the portuguese teaching system. \
 The AI should help the human by giving clear detail on how to solve an exercise or how to understand a concept. \
 The AI must not use techniques that are considered to be of higher educational experience. \
 Any equations provided by the AI should be written delimited by ```. \
-If the AI does not know the answer to a question, it truthfully says it does not know. \
+If the AI does not know the answer to a question, it truthfully says it does not know. 
+\
+You have access to the following tools:\
 """
-
-conv_memory = ConversationBufferWindowMemory(
-    memory_key="chat_history_lines",
-    input_key="input",
-    k=1
-)
-
-summary_memory = ConversationSummaryMemory(llm=summary_llm, input_key="input")
-# Combined
-memory = CombinedMemory(memories=[conv_memory, summary_memory])
-
-_DEFAULT_TEMPLATE = f"{context}" + """
-
-Summary of conversation:
-{history}
-Current conversation:
-{chat_history_lines}
-Human: {input}
-AI:"""
-PROMPT = PromptTemplate(
-    input_variables=["history", "input", "chat_history_lines"], template=_DEFAULT_TEMPLATE
-)
-
-conversation = ConversationChain(
-    llm=math_llm, 
-    verbose=False, # change to False to only show the answer when running
-    memory=memory,
-    prompt=PROMPT
-)
 
 wolframalpha = WolframAlphaAPIWrapper()
 tools = [
@@ -79,23 +53,39 @@ tools = [
     )
 ]
 
-agent_chain = initialize_agent( 
-    tools, math_llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
-)
+prefix = context
+suffix = """Begin!"
 
-print(conversation.run(context))
+{chat_history}
+Question: {input}
+{agent_scratchpad}"""
+
+prompt = ZeroShotAgent.create_prompt(
+    tools,
+    prefix=prefix,
+    suffix=suffix,
+    input_variables=["input", "chat_history", "agent_scratchpad"],
+)
+memory = ConversationBufferMemory(memory_key="chat_history")
+
+llm_chain = LLMChain(llm=math_llm, prompt=prompt)
+
+agent = ZeroShotAgent(llm_chain=llm_chain, tools=tools, verbose=True)
+
+agent_chain = AgentExecutor.from_agent_and_tools(
+    agent=agent, tools=tools, verbose=True, memory=memory
+)
 
 from PerfectPrompt import better_prompt
 
 while True:
-    input_prompt = input()
+    input_prompt = input("\nOriginal input:\n\t")
     if input_prompt == "X":
         break
     new_input_prompt = better_prompt(input_prompt)
-    print(f"\nOriginal input:\n{input_prompt}\n\"Better\" input:\n{new_input_prompt}")
-    answer = conversation.run(new_input_prompt)
-    print(f"ChatBot output to pass to the agent:\n\t{answer}\n")
-    final_answer = agent_chain.run(answer)
+    print(f"\n\"Better\" input:\n\t{new_input_prompt}")
+    answer = agent_chain.run(new_input_prompt)
     print(f"Agent output:\n\t{answer}\n")
+
 
 
