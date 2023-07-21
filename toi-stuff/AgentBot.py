@@ -75,5 +75,13 @@ class AgentChatBot:
         )
     
     def ask(self, input_prompt):
-        return self.AGENT_CHAIN.run(input_prompt)
+        try:
+            return self.AGENT_CHAIN.run(input_prompt)
+        except Exception as e:
+            answer = str(e)
+            if answer.startswith("Could not parse LLM output: `"):
+                answer = answer.removeprefix("Could not parse LLM output: `").removesuffix("`")
+                return answer
+            else:
+                raise Exception(str(e))
     

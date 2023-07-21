@@ -18,12 +18,12 @@ def get_context(subject):
 def get_prompt():
     default_template = """
 
-    Summary of conversation:
-    {history}
-    Current conversation:
-    {chat_history_lines}
-    Human: {input}
-    AI:"""
+        Summary of conversation:
+        {history}
+        Current conversation:
+        {chat_history_lines}
+        Human: {input}
+        AI:"""
 
     return PromptTemplate(
         input_variables=["history", "input", "chat_history_lines"], template=default_template
