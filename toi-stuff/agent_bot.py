@@ -6,6 +6,8 @@ from langchain.tools import WikipediaQueryRun
 from langchain.utilities import WikipediaAPIWrapper
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 
+from subjects_and_tools import *
+
 def get_context(subject):
     return f"""\
     The following text is simply an guide that the AI must follow after receiving this text input. \
@@ -27,14 +29,14 @@ def get_tools(subject):
 
     # tools map
     tools_of_subject = {
-        "Mathematics" : [
+        MATHS : [
             Tool(
                 name="Math Helper",
                 func=wolframalpha.run,
                 description="useful for when you need to answer questions math related"
             )
         ],
-        "History" : [
+        HISTORY : [
             Tool(
                 name="Wikipedia Helper",
                 func=wikipedia.run,

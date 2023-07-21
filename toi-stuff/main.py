@@ -1,17 +1,14 @@
-from AgentBot import AgentChatBot
-from ConversationBot import ConversationChatBot
-from PerfectPrompt import perfect_prompt
+from agent_bot import AgentChatBot
+from conversation_bot import ConversationChatBot
+from perfect_bot import perfect_prompt
+from decision_bot import need_agent
 
-from Config import load_environment
+from config import load_environment
 
-from DecisionBot import need_agent
-
-
-MATHS = "Mathematics"
-HISTORY = "History"
+from subjects_and_tools import *
 
 
-subject = HISTORY
+subject = MATHS
 
 
 agent = AgentChatBot(subject)
@@ -21,9 +18,9 @@ conversation = ConversationChatBot(subject)
 def ask_chat(input_prompt):
     if input_prompt == "X":
         return "AAAA"
-    new_input_prompt = perfect_prompt(input_prompt, conversation.MEMORY)
-    print(f"\n\"Better\" input:\n\t{new_input_prompt}\n")
-    answer = agent.ask(new_input_prompt) if need_agent(new_input_prompt) else conversation.ask(new_input_prompt)
+    #new_input_prompt = perfect_prompt(input_prompt)
+    #print(f"\n\"Better\" input:\n\t{new_input_prompt}\n")
+    answer = agent.ask(input_prompt) if need_agent(input_prompt) else conversation.ask(input_prompt)
     return answer
 
 
@@ -36,6 +33,5 @@ if __name__ == "__main__":
         answer = ask_chat(prompt)
         print(f"Output:\n\t{answer}")
 
-    #print(conversation.MEMORY.memories[-1].)
 
         
