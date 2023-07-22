@@ -4,7 +4,7 @@ HISTORY = "History"
 PORTUGUESE = "Portuguese"
 ENGLISH = "English (Secondary Language)"
 PHY_CHEM = "Physics and Chemistry"
-BIO = "Biology"
+BIO_GEO = "Biology and Geology"
 PHILOSOPHY = "Philosophy"
 
 # import packages

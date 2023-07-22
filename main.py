@@ -12,7 +12,7 @@ chats = {
     PORTUGUESE : "",
     ENGLISH : "",
     PHY_CHEM : "",
-    BIO : "",
+    BIO_GEO : "",
     PHILOSOPHY : ""
 }
 
@@ -22,7 +22,7 @@ agents = {
     PORTUGUESE : AgentChatBot(PORTUGUESE),
     ENGLISH : AgentChatBot(ENGLISH),
     PHY_CHEM : AgentChatBot(PHY_CHEM),
-    BIO : AgentChatBot(BIO),
+    BIO_GEO : AgentChatBot(BIO_GEO),
     PHILOSOPHY : AgentChatBot(PHILOSOPHY)
 }
 
@@ -32,7 +32,7 @@ conversations = {
     PORTUGUESE : ConversationChatBot(PORTUGUESE),
     ENGLISH : ConversationChatBot(ENGLISH),
     PHY_CHEM : ConversationChatBot(PHY_CHEM),
-    BIO : ConversationChatBot(BIO),
+    BIO_GEO : ConversationChatBot(BIO_GEO),
     PHILOSOPHY : ConversationChatBot(PHILOSOPHY)
 }
 
