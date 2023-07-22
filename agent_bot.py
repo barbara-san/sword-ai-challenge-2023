@@ -1,10 +1,7 @@
 from langchain.chat_models import AzureChatOpenAI
-from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
+from langchain.agents import ZeroShotAgent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import LLMChain
-from langchain.tools import WikipediaQueryRun
-from langchain.utilities import WikipediaAPIWrapper
-from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 
 from subjects_and_tools import *
 
