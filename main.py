@@ -1,11 +1,11 @@
-from promptbot import better_prompt
-from agentbot import AgentChatBot
-from conversationbot import ConversationChatBot
+from perfect_bot import better_prompt
+from agent_bot import AgentChatBot
+from conversation_bot import ConversationChatBot
 
 from config import load_environment
 load_environment()
 
-from decisionbot import need_agent
+from decision_bot import need_agent
 
 
 MATH = "mathematics"
