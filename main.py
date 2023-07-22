@@ -59,7 +59,7 @@ def subject(id):
     if request.method == 'POST':
         expr = request.form.get('data')
         chats[id] += "<strong>You: </strong>" + expr + "<p></p>";
-        chats[id] += "<strong>" + id + " tutor: <strong>" + ask_chat(expr, id) + "<p></p>"
+        chats[id] += "<strong>" + id + " tutor: </strong>" + ask_chat(expr, id) + "<p></p>"
     return render_template('subject.html',
                             subject=id, conversation=chats[id])
 
