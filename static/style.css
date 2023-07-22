@@ -47,7 +47,12 @@ nav {
     font-size: 17px;
     margin: 0;
     text-align: center;
-    height: 14px + 14px+ 14px;
+}
+
+nav {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 nav a {
@@ -56,10 +61,13 @@ nav a {
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
+    line-height: 1;
+    margin-top: 4px;
 }
 
 nav a:hover {
     background-color: #06b39a;
+    border-radius: 25px;
 }
 
 footer {
@@ -107,6 +115,7 @@ h1 {
     padding-top: 10px;
     color: #06b39a;
     font-size: 40px;
+    padding-bottom: 20px;
 }
 
 h2 {
