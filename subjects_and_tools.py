@@ -52,6 +52,6 @@ TOOLS_OF = {
     PORTUGUESE : [wikipedia, duckduckgo, google_serper],
     ENGLISH : [wikipedia, duckduckgo, google_serper],
     PHY_CHEM : [wolframalpha, wikipedia, duckduckgo, google_serper],
-    BIO : [wolframalpha, wikipedia, duckduckgo, google_serper],
+    BIO_GEO : [wolframalpha, wikipedia, duckduckgo, google_serper],
     PHILOSOPHY : [wikipedia, duckduckgo, google_serper]
 }
