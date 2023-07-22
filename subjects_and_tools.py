@@ -47,7 +47,7 @@ google_serper = Tool(
 
 # tools mapping
 TOOLS_OF = {
-    MATHS : [wolframalpha, google_serper],
+    MATHS : [wolframalpha],
     HISTORY : [wikipedia, duckduckgo, google_serper],
     PORTUGUESE : [wikipedia, duckduckgo, google_serper],
     ENGLISH : [wikipedia, duckduckgo, google_serper],
