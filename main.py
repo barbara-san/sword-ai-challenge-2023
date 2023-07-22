@@ -27,7 +27,7 @@ agents = {
 }
 
 conversations = {
-    MATHS : AgentChatBot(MATHS),
+    MATHS : ConversationChatBot(MATHS),
     HISTORY : ConversationChatBot(HISTORY),
     PORTUGUESE : ConversationChatBot(PORTUGUESE),
     ENGLISH : ConversationChatBot(ENGLISH),
