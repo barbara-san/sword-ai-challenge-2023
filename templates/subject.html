@@ -1,20 +1,17 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Tutor{% endblock %}</h1>
+<h1>{% block title %}High School {{ subject }} Tutor{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<p>
-  <b>Subject: </b>{{ subject }}
-</p>
 <p>{{ conversation | safe }}</p>
 
 
-<p>Input:
+<p>
   <form method="POST">
-    <input type="text" name="data" placeholder="Enter some data...">
-    <input type="submit">
+    <input type="text" name="data" placeholder="Ask your questions here!">
+    <input type="submit" placeholder="enter">
   </form>
 </p>
 
