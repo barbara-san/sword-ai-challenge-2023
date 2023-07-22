@@ -5,7 +5,7 @@ PORTUGUESE = "Portuguese"
 ENGLISH = "English (Secondary Language)"
 PHY_CHEM = "Physics and Chemistry"
 BIO = "Biology"
-PHILOSOPHY = "Phylosophy"
+PHILOSOPHY = "Philosophy"
 
 # import packages
 from langchain.agents import Tool
