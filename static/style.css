@@ -25,13 +25,11 @@ h6 {
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 36px;
     color: black;
 }
 
-p,
-ul,
-li {
+p {
     margin: 15px 0;
 }
 
@@ -48,31 +46,34 @@ li {
 
 nav {
     overflow: hidden;
-    background-color: #1a1a1a;
+    background-color: #035f52;
     top: 0;
     width: 100%;
     font-size: 17px;
+    margin: 0;
+    text-align: center;
+    height: 14px + 14px+ 14px;
 }
 
 nav a {
-    float: left;
-    display: block;
+    display: inline-block;
     color: white;
     text-align: center;
-    padding: 14px 24px;
+    padding: 14px 20px;
     text-decoration: none;
 }
 
 nav a:hover {
-    background-color: #333333;
+    background-color: #06b39a;
 }
+  
 
 footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     overflow: hidden;
-    background-color: #1a1a1a;
+    background-color: #035f52;
     display: block;
     color: white;
     text-decoration: none;
@@ -83,7 +84,6 @@ footer {
 
 footer p {
     overflow: hidden;
-    background-color: #1a1a1a;
     color: white;
     text-align: center;
     font-size: 14px;
@@ -95,10 +95,10 @@ header, title, p form {
     text-align: center;
 }
 
-/*h2, ul {
+p {
     margin-left: 15%;
     margin-right: 15%;
-}*/
+}
 
 h2, ul {
     text-align: center;
@@ -108,8 +108,21 @@ ul {
     list-style: none;
 }
 
+h1 {
+    padding-top: 10px;
+    color: #06b39a;
+    font-size: 40px;
+}
+
+h2 {
+    color: #06b39a;
+    font-size: 25px;
+    padding-bottom: 10px;
+}
+
 li {
-    padding-bottom: 5px;
+    font-size: 20px;
+    padding-bottom: 10px;
 }
 
 a {
@@ -120,5 +133,5 @@ a {
 }
 
 ul li a:hover {
-    color:crimson;
+    color: #023830;
 }
