@@ -8,7 +8,7 @@ from config import load_environment
 from subjects_and_tools import *
 
 
-subject = MATHS
+subject = HISTORY
 
 
 agent = AgentChatBot(subject)

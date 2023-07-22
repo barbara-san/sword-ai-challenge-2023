@@ -22,31 +22,6 @@ def get_context(subject):
     You have access to the following tools:\
     """
 
-def get_tools(subject):
-    # APIs
-    wolframalpha = WolframAlphaAPIWrapper()
-    wikipedia = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
-
-    # tools map
-    tools_of_subject = {
-        MATHS : [
-            Tool(
-                name="Math Helper",
-                func=wolframalpha.run,
-                description="useful for when you need to answer questions math related"
-            )
-        ],
-        HISTORY : [
-            Tool(
-                name="Wikipedia Helper",
-                func=wikipedia.run,
-                description="useful for when you need to search about any topic and get some historical knowledge from it"
-            )
-        ]
-    }
-
-    return tools_of_subject.get(subject)
-
 def get_prompt(subject):
     suffix = """Begin!"
 
@@ -55,7 +30,7 @@ def get_prompt(subject):
     {agent_scratchpad}"""
 
     return ZeroShotAgent.create_prompt(
-        get_tools(subject),
+        TOOLS_OF[subject],
         prefix=get_context(subject),
         suffix=suffix,
         input_variables=["input", "chat_history", "agent_scratchpad"],
@@ -71,9 +46,9 @@ class AgentChatBot:
         self.LLM = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=self.MAX_TOKENS, temperature=self.TEMPERATURE)
         self.MEMORY = ConversationBufferMemory(memory_key="chat_history")
         self.LLM_CHAIN = LLMChain(llm=self.LLM, prompt=get_prompt(subject))
-        self.AGENT = ZeroShotAgent(llm_chain=self.LLM_CHAIN, tools=get_tools(subject), verbose=self.VERBOSE)
+        self.AGENT = ZeroShotAgent(llm_chain=self.LLM_CHAIN, tools=TOOLS_OF[subject], verbose=self.VERBOSE)
         self.AGENT_CHAIN = AgentExecutor.from_agent_and_tools(
-            agent=self.AGENT, tools=get_tools(subject), verbose=True, memory=self.MEMORY
+            agent=self.AGENT, tools=TOOLS_OF[subject], verbose=True, memory=self.MEMORY
         )
     
     def ask(self, input_prompt):
