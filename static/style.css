@@ -58,10 +58,9 @@ nav a {
 nav a:hover {
     background-color: #06b39a;
 }
-  
 
 footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     overflow: hidden;
@@ -87,17 +86,7 @@ header, title, p form {
     text-align: center;
 }
 
-/*p {
-    margin-left: 15%;
-    margin-right: 15%;
-}*/
-
-p.conversation {
-    width: 50%;  /* or whatever width you prefer */
-    margin: auto;
-}
-
-form {
+.content {
     width: 50%;  /* or whatever width you prefer */
     margin: auto;
 }
@@ -136,4 +125,42 @@ a {
 
 ul li a:hover {
     color: #023830;
+}
+
+
+input[type=submit] {
+    background-color: #06b39a; /* green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;  /* makes it circular */
+    padding: 0;
+    cursor: pointer;
+}
+
+input[type=submit]:before {
+    content: "\2192";
+    font-size: 20px;
+}
+
+
+input[type=text] {
+    width: 85%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #035f52;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    border-radius: 10%;
+}
+
+input[type=text]:focus {
+    border: 1px solid #023830;
 }
