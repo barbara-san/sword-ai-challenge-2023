@@ -99,7 +99,7 @@ header, title, p form {
 }
 
 .content {
-    width: 50%;  /* or whatever width you prefer */
+    width: 60%;  /* or whatever width you prefer */
     margin: auto;
 }
 
@@ -140,38 +140,42 @@ ul li a:hover {
     color: #023830;
 }
 
-
-input[type=submit] {
+button[type=submit] {
     background-color: #06b39a;
     border: none;
     color: white;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    width: 80px;
-    height: 40px;
-    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;  /* makes it circular */
     padding: 0;
     cursor: pointer;
+    font-size: 16px;
 }
 
-input[type=submit]:hover {
+button[type=submit]:hover {
     background-color: #035f52;
 }
 
+button i {
+    color: white;
+}
+
 input[type=text] {
-    width: 85%;
+    width: 90%;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
     border: 1px solid #06b39a;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
+    -webkit-transition: 0.7s;
+    transition: 0.7s;
     outline: none;
-    border-radius: 20px;
+    border-radius: 25px;
+    height: 50px;
 }
 
 input[type=text]:focus {
-    border: 1px solid #023830;
+    border: 1px solid #035f52;
 }
