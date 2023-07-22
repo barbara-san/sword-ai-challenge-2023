@@ -92,6 +92,11 @@ header, title, p form {
     margin-right: 15%;
 }*/
 
+p.conversation {
+    width: 50%;  /* or whatever width you prefer */
+    margin: auto;
+}
+
 form {
     width: 50%;  /* or whatever width you prefer */
     margin: auto;
