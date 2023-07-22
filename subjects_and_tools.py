@@ -9,8 +9,8 @@ PHILOSOPHY = "Philosophy"
 
 # import packages
 from langchain.agents import Tool
-from langchain.tools import WikipediaQueryRun
-from langchain.utilities import WikipediaAPIWrapper
+from langchain.tools import WikipediaQueryRun, DuckDuckGoSearchRun
+from langchain.utilities import WikipediaAPIWrapper, GoogleSerperAPIWrapper
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 
 # load env. variables
@@ -20,6 +20,8 @@ load_environment()
 # APIs
 wolframalpha_api = WolframAlphaAPIWrapper()
 wikipedia_api = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
+duckduckgo_api = DuckDuckGoSearchRun()
+google_serper_api = GoogleSerperAPIWrapper()
 
 # tools
 wolframalpha = Tool(
@@ -30,16 +32,26 @@ wolframalpha = Tool(
 wikipedia = Tool(
     name="Wikipedia Helper",
     func=wikipedia_api.run,
-    description="useful for when you need to search about any topic and get some historical knowledge from it"
+    description="useful for when you need to search about any topic and get some historical knowledge from it through the information on Wikipedia"
+)
+duckduckgo = Tool(
+    name="Web Search (DuckDuckGo)",
+    func=duckduckgo_api.run,
+    description="useful for when you need to search about any topic using the DuckDuckGo web engine"
+)
+google_serper = Tool(
+    name="Intermediate Answer (Google Serper Search)",
+    func=google_serper_api.run,
+    description="useful for when you need to ask with search"
 )
 
 # tools mapping
 TOOLS_OF = {
-    MATHS : [wolframalpha],
-    HISTORY : [wikipedia],
-    PORTUGUESE : [wikipedia],
-    ENGLISH : [wikipedia],
-    PHY_CHEM : [wolframalpha, wikipedia],
-    BIO : [wolframalpha, wikipedia],
-    PHILOSOPHY : [wikipedia]
+    MATHS : [wolframalpha, google_serper],
+    HISTORY : [wikipedia, duckduckgo, google_serper],
+    PORTUGUESE : [wikipedia, duckduckgo, google_serper],
+    ENGLISH : [wikipedia, duckduckgo, google_serper],
+    PHY_CHEM : [wolframalpha, wikipedia, duckduckgo, google_serper],
+    BIO : [wolframalpha, wikipedia, duckduckgo, google_serper],
+    PHILOSOPHY : [wikipedia, duckduckgo, google_serper]
 }
