@@ -6,8 +6,6 @@ load_environment()
 from decision_bot import need_agent
 from subjects_and_tools import *
 
-
-subject = HISTORY
 chats = {
     MATHS : "",
     HISTORY : "",
