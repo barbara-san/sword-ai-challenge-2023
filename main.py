@@ -1,10 +1,10 @@
-from perfect_bot import perfect_prompt
 from agent_bot import AgentChatBot
 from conversation_bot import ConversationChatBot
 from config import load_environment
-load_environment()
 from decision_bot import need_agent
+from perfect_bot import perfect_prompt
 from subjects_and_tools import *
+load_environment()
 
 chats = {
     MATHS : "",
@@ -62,8 +62,6 @@ def subject(id):
             chats[id] += "<strong>" + id + " tutor: </strong>" + answer + "<p></p>"
     return render_template('subject.html',
                             subject=id, conversation=chats[id])
-
-
 
 if __name__ == "__main__":
     app.run()

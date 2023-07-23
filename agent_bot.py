@@ -61,7 +61,7 @@ class AgentChatBot:
             self.MEMORY.chat_memory.messages = messages_from_dict(json.load(history))
         history.close()
 
-    def save_memory(self):     # test to check if should be "a"
+    def save_memory(self):
         with open(self.MEMORY_PATH, "w") as history:
             json.dump(messages_to_dict(self.MEMORY.chat_memory.messages), history)
         history.close()
