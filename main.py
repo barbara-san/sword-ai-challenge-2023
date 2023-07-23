@@ -36,7 +36,6 @@ conversations = {
     PHILOSOPHY : ConversationChatBot(PHILOSOPHY)
 } 
 
-
 def ask_chat(input_prompt, subject):
     if input_prompt == "":
         return "empty"

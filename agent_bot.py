@@ -3,6 +3,9 @@ from langchain.agents import ZeroShotAgent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import LLMChain
 
+import json
+from langchain.schema import messages_from_dict, messages_to_dict, AIMessage
+
 from subjects_and_tools import *
 
 def get_context(subject):
@@ -41,20 +44,43 @@ class AgentChatBot:
         self.TEMPERATURE = 0.2
         self.VERBOSE = True
         self.LLM = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=self.MAX_TOKENS, temperature=self.TEMPERATURE)
+        
+        # create empty memory and save an empty json file for the memory
         self.MEMORY = ConversationBufferMemory(memory_key="chat_history")
+        self.MEMORY_PATH = f"json_chats_memory/{self.SUBJECT}.json"
+        self.save_memory() # to create the history file
+
         self.LLM_CHAIN = LLMChain(llm=self.LLM, prompt=get_prompt(subject))
         self.AGENT = ZeroShotAgent(llm_chain=self.LLM_CHAIN, tools=TOOLS_OF[subject], verbose=self.VERBOSE)
         self.AGENT_CHAIN = AgentExecutor.from_agent_and_tools(
             agent=self.AGENT, tools=TOOLS_OF[subject], verbose=True, memory=self.MEMORY
         )
+
+    def load_memory(self):
+        with open(self.MEMORY_PATH, "r") as history:
+            self.MEMORY.chat_memory.messages = messages_from_dict(json.load(history))
+        history.close()
+
+    def save_memory(self):     # test to check if should be "a"
+        with open(self.MEMORY_PATH, "w") as history:
+            json.dump(messages_to_dict(self.MEMORY.chat_memory.messages), history)
+        history.close()
     
     def ask(self, input_prompt):
+        self.load_memory()
         try:
-            return self.AGENT_CHAIN.run(input_prompt)
+            answer = self.AGENT_CHAIN.run(input_prompt)
+            self.save_memory()
+            return answer
+            
         except Exception as e:
             answer = str(e)
             if answer.startswith("Could not parse LLM output: `"):
                 answer = answer.removeprefix("Could not parse LLM output: `").removesuffix("`")
+                self.MEMORY.chat_memory.messages.append(
+                    AIMessage(content=answer)
+                )
+                self.save_memory()
                 return answer
             else:
                 raise Exception(str(e))

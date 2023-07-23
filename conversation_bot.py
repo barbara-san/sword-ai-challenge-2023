@@ -1,7 +1,10 @@
 from langchain.chat_models import AzureChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferWindowMemory, CombinedMemory, ConversationSummaryMemory
+from langchain.memory import ConversationBufferMemory
+
+from langchain.schema import messages_from_dict, messages_to_dict
+import json
 
 def get_context(subject):
     return f"""\
@@ -17,26 +20,18 @@ def get_context(subject):
 
 def get_prompt():
     default_template = """
-
-        Summary of conversation:
-        {history}
         Current conversation:
-        {chat_history_lines}
+        {chat_history}
         Human: {input}
         AI:"""
 
     return PromptTemplate(
-        input_variables=["history", "input", "chat_history_lines"], template=default_template
+        input_variables=["input", "chat_history"], template=default_template
     )
 
-def define_memory(k_value=5):
-    conv_memory = ConversationBufferWindowMemory(
-        memory_key="chat_history_lines",
-        input_key="input",
-        k=k_value
-    )
+""" def define_memory(conv_memory):
     summary_memory = ConversationSummaryMemory(llm=AzureChatOpenAI(deployment_name="gpt35-team-3-0301"), input_key="input")
-    return CombinedMemory(memories=[conv_memory, summary_memory])
+    return CombinedMemory(memories=[conv_memory, summary_memory]) """
 
 class ConversationChatBot:
     def __init__(self, subject) -> None:
@@ -45,7 +40,12 @@ class ConversationChatBot:
         self.TEMPERATURE = 0.2
         self.VERBOSE = True
         self.CHAT_LMM = AzureChatOpenAI(deployment_name="gpt35-team-3-0301", max_tokens=self.MAX_TOKENS, temperature=self.TEMPERATURE)
-        self.MEMORY = define_memory(k_value=2)
+        
+        # create empty memory and save an empty json file for the memory
+        self.MEMORY = ConversationBufferMemory(memory_key="chat_history", input_key="input")
+        self.MEMORY_PATH = f"json_chats_memory/{self.SUBJECT}.json"
+        self.save_memory() # to create the history file
+
         self.PROMPT = get_prompt()
         self.CONVERSATION = ConversationChain(
             llm = self.CHAT_LMM, 
@@ -55,7 +55,20 @@ class ConversationChatBot:
         )
         # give context
         self.ask(get_context(subject))
+    
+    def load_memory(self):
+        with open(self.MEMORY_PATH, "r") as history:
+            self.MEMORY.chat_memory.messages = messages_from_dict(json.load(history))
+        history.close()
+
+    def save_memory(self):     # test to check if should be "a"
+        with open(self.MEMORY_PATH, "w") as history:
+            json.dump(messages_to_dict(self.MEMORY.chat_memory.messages), history)
+        history.close()
 
     def ask(self, input_prompt):
-        return self.CONVERSATION.run(input_prompt)
+        self.load_memory()
+        answer = self.CONVERSATION.run(input_prompt)
+        self.save_memory()
+        return answer
 
