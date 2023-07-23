@@ -34,13 +34,14 @@ conversations = {
     PHY_CHEM : ConversationChatBot(PHY_CHEM),
     BIO_GEO : ConversationChatBot(BIO_GEO),
     PHILOSOPHY : ConversationChatBot(PHILOSOPHY)
-}
+} 
 
 
 def ask_chat(input_prompt, subject):
-    if input_prompt == "X":
-        return "AAAA "
-    new_input_prompt = perfect_prompt(input_prompt)
+    if input_prompt == "":
+        return "empty"
+    # new_input_prompt = perfect_prompt(input_prompt)
+    new_input_prompt = input_prompt
     answer = agents[subject].ask(new_input_prompt) if need_agent(new_input_prompt) else conversations[subject].ask(new_input_prompt)
     return answer
 
@@ -56,8 +57,10 @@ def index():
 def subject(id):
     if request.method == 'POST':
         expr = request.form.get('data')
-        chats[id] += "<strong>You: </strong>" + expr + "<p></p>";
-        chats[id] += "<strong>" + id + " tutor: </strong>" + ask_chat(expr, id) + "<p></p>"
+        answer = ask_chat(expr, id)
+        if answer != "empty":
+            chats[id] += "<strong>You: </strong>" + expr + "<p></p>"
+            chats[id] += "<strong>" + id + " tutor: </strong>" + answer + "<p></p>"
     return render_template('subject.html',
                             subject=id, conversation=chats[id])
 
